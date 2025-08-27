@@ -2,16 +2,11 @@ import time
 import os
 import json
 import google.generativeai as genai
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, request
 
-# Verifica ruta actual y contenido de templates
-print("📂 Ruta actual:", os.getcwd())
-print("📄 Archivos en ./templates:", os.listdir("templates"))
-
-# Clave API gratuita
+# Configura la API de Gemini
 API_KEY = "AIzaSyAvL_TQGMbXzKHfEi_iiwJlnwzY6jUwux4"
 genai.configure(api_key=API_KEY)
-
 MODEL_NAME = "gemini-1.5-flash-latest"
 
 try:
@@ -22,15 +17,15 @@ except Exception as e:
     print(f"❌ Error al cargar el modelo: {e}")
     chat = None
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static", template_folder="templates")
 
 # Cargar respuestas locales desde JSON
 try:
     with open("local_responses.json", "r", encoding="utf-8") as f:
         local_responses = json.load(f)
-    print("✅ Respuestas locales cargadas desde JSON")
+    print("✅ Respuestas locales cargadas")
 except Exception as e:
-    print(f"❌ Error al cargar el archivo JSON: {e}")
+    print(f"❌ Error al cargar respuestas locales: {e}")
     local_responses = {}
 
 @app.route("/", methods=["GET", "POST"])
