@@ -2,26 +2,30 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>ChatBot Yereexx</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <title>Chat Bot Yereexx</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="chat-box">
-        <h2>💬 ChatBot Yereexx</h2>
-        {% for msg in chat_history %}
-            <div class="message">
-                <span class="{{ 'user' if msg.role == 'user' else 'bot' }}">{{ msg.role.capitalize() }}:</span>
-                {{ msg.parts[0].text }}
-            </div>
-        {% endfor %}
-        <form method="post">
-            <input type="text" name="user_input" placeholder="Escribe tu mensaje..." required>
+    <div class="container">
+        <h1>🤖 Chat Bot Yereexx</h1>
+
+        <form method="POST">
+            <input type="text" name="user_input" placeholder="Escribe tu mensaje..." autocomplete="off" required>
             <button type="submit">Enviar</button>
         </form>
+
         {% if error %}
             <div class="error">{{ error }}</div>
         {% endif %}
+
+        <div class="chat-box">
+            {% for message in chat_history %}
+                <div class="message {{ message.role }}">
+                    <strong>{{ 'Usuario' if message.role == 'user' else 'Bot' }}:</strong>
+                    {{ message.parts[0].text }}
+                </div>
+            {% endfor %}
+        </div>
     </div>
 </body>
 </html>
