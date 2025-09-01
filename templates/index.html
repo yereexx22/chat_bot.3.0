@@ -2,30 +2,32 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Chat Bot Yereexx</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Copilot-like</title>
+    <link rel="stylesheet" href="styles.css"> 
 </head>
 <body>
-    <div class="container">
-        <h1>🤖 Chat Bot Yereexx</h1>
 
-        <form method="POST">
-            <input type="text" name="user_input" placeholder="Escribe tu mensaje..." autocomplete="off" required>
+    <div class="container">
+        <h1>Asistente de IA</h1>
+        
+        <div class="chat-box" id="chat-box">
+            <div class="message bot">
+                <strong>Bot</strong>
+                <span>Hola, soy un asistente de IA. ¿En qué puedo ayudarte hoy?</span>
+            </div>
+            <div class="message user">
+                <strong>Tú</strong>
+                <span>¡Hola! Necesito un poco de ayuda con CSS.</span>
+            </div>
+        </div>
+
+        <form id="chat-form">
+            <input type="text" id="user-input" placeholder="Escribe tu mensaje..." required>
             <button type="submit">Enviar</button>
         </form>
 
-        {% if error %}
-            <div class="error">{{ error }}</div>
-        {% endif %}
-
-        <div class="chat-box">
-            {% for message in chat_history %}
-                <div class="message {{ message.role }}">
-                    <strong>{{ 'Usuario' if message.role == 'user' else 'Bot' }}:</strong>
-                    {{ message.parts[0].text }}
-                </div>
-            {% endfor %}
         </div>
-    </div>
+
 </body>
 </html>
