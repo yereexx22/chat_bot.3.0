@@ -3,31 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Copilot-like</title>
-    <link rel="stylesheet" href="styles.css"> 
+    <title>Chat bot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <div class="chat-wrapper">
+        <header>
+            <h1 class="glow-title">♠️YUNIX</h1>
+        </header>
 
-    <div class="container">
-        <h1>Asistente de IA</h1>
-        
-        <div class="chat-box" id="chat-box">
-            <div class="message bot">
-                <strong>Bot</strong>
-                <span>Hola, soy un asistente de IA. ¿En qué puedo ayudarte hoy?</span>
-            </div>
-            <div class="message user">
-                <strong>Tú</strong>
-                <span>¡Hola! Necesito un poco de ayuda con CSS.</span>
-            </div>
+        <main id="chat-box">
+            {% for message in chat_history %}
+                <div class="message {{ message.role }}">
+                    <div class="bubble">
+                        <span class="role">
+                            {% if message.role == "model" %}
+                                Yunix
+                            {% elif message.role == "user" %}
+                                Tú
+                            {% else %}
+                                {{ message.role.capitalize() }}
+                            {% endif %}
+                        </span>
+                        <p>{{ message.parts[0].text }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </main>
+
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <!-- Indicador de carga con X blanca -->
+        <div id="loading-indicator" class="loading hidden">
+            <div class="x-loader"></div>
         </div>
 
-        <form id="chat-form">
-            <input type="text" id="user-input" placeholder="Escribe tu mensaje..." required>
-            <button type="submit">Enviar</button>
+        <form method="POST" class="chat-input">
+            <input type="text" name="user_input" placeholder="Escribe tu mensaje..." autocomplete="off" required>
+            <button type="submit">➤</button>
         </form>
+    </div>
 
-        </div>
+    <script>
+        const form = document.querySelector("form");
+        const loading = document.getElementById("loading-indicator");
 
+        form.addEventListener("submit", () => {
+            loading.classList.remove("hidden");
+        });
+
+        window.onload = () => {
+            const chatBox = document.getElementById("chat-box");
+            if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
+            loading.classList.add("hidden");
+        };
+    </script>
 </body>
 </html>
